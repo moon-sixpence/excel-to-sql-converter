@@ -63,4 +63,13 @@ cd excel-to-sql-converter
 mvn clean package
 java -jar target/excel-to-sql-converter-1.0.0.jar
 ```
+## 访问
+打开浏览器访问 Open the browser
+```
+http://localhost:8081
+```
+
+![img.png](file/index.png)
+
+
 
