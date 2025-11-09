@@ -18,7 +18,7 @@ public class MysqlFunctionCheckerByList {
             "ABS", "ROUND", "FLOOR", "CEIL", "CEILING", "SUM", "AVG", "MAX", "MIN", "COUNT",
             "MOD", "POWER", "SQRT", "RAND", "INT", "CAST", "CONVERT",
             // 日期时间函数
-            "NOW", "CURDATE", "CURTIME", "DATE", "TIME", "YEAR", "MONTH", "DAY", "HOUR",
+            "NOW", "CURDATE", "SYSDATE","CURTIME", "DATE", "TIME", "YEAR", "MONTH", "DAY", "HOUR",
             "MINUTE", "SECOND", "DATE_FORMAT", "STR_TO_DATE", "TIMESTAMPDIFF", "DATEDIFF",
             // 逻辑/空值函数
             "IF", "IFNULL", "NULLIF", "CASE", "COALESCE",
@@ -30,21 +30,25 @@ public class MysqlFunctionCheckerByList {
 
     /**
      * 判断字符串是否为 MySQL 内置函数
-     * @param functionName 要判断的字符串
+     * @param functionExpression 要判断的字符串
      * @return true=是内置函数，false=否
      */
-    public static boolean isMysqlBuiltinFunction(String functionName) {
-        if (functionName == null || functionName.trim().isEmpty()) {
+    public static boolean isMysqlBuiltinFunction(String functionExpression) {
+        if (functionExpression == null || functionExpression.isEmpty()) {
             return false;
         }
-        // 统一转大写，匹配预定义清单（清单已大写，匹配效率 O(1)）
-        String upperName = functionName.trim().toUpperCase();
-        for (String func : MYSQL_BUILTIN_FUNCTIONS) {
-            if (upperName.contains(func)) {
-                return  true;
-            }
+
+        // 去除函数名后的括号和参数
+        String functionName = functionExpression;
+        int parenIndex = functionExpression.indexOf('(');
+        if (parenIndex != -1) {
+            functionName = functionExpression.substring(0, parenIndex);
         }
-        return false;
+
+        // 去除可能存在的空格并转为大写
+        functionName = functionName.trim().toUpperCase();
+
+        return MYSQL_BUILTIN_FUNCTIONS.contains(functionName);
     }
 
     // 测试方法
